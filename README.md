@@ -92,4 +92,4 @@ These can be found in the `resources` folder after usage.
 ## 👩‍💻 Author
 Made with ❤️ by Alexia Cojan
 📧 cojanalexia@yahoo.com
-🔗 LinkedIn
+🔗 [LinkedIn]([url](https://www.linkedin.com/in/alexia-ilaria-cojan-122bba2bb/))
