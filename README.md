@@ -58,7 +58,9 @@ Social-Network-App/ ├── src/
 
 ## 📷 UI Screenshots
 
-> (📌 Optional: You can add screenshots of the login page, main dashboard, friend list, messaging window, etc.)
+> ![image](https://github.com/user-attachments/assets/bdf41a44-7ace-49ca-8e67-4cda344c4b4f)
+![image](https://github.com/user-attachments/assets/0bdb0730-9acc-4c3f-b119-70496f6f1b5b)
+
 
 ---
 
@@ -89,7 +91,3 @@ These can be found in the `resources` folder after usage.
 🛠️ Open to further expansion and UI polish
 
 ---
-## 👩‍💻 Author
-Made with ❤️ by Alexia Cojan
-📧 cojanalexia@yahoo.com
-🔗 [LinkedIn]([url](https://www.linkedin.com/in/alexia-ilaria-cojan-122bba2bb/))
