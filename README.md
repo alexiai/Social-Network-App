@@ -57,10 +57,16 @@ Social-Network-App/ ├── src/
 ---
 
 ## 📷 UI Screenshots
-
-> ![image](https://github.com/user-attachments/assets/bdf41a44-7ace-49ca-8e67-4cda344c4b4f)
-![image](https://github.com/user-attachments/assets/0bdb0730-9acc-4c3f-b119-70496f6f1b5b)
-
+-Login:
+![image](https://github.com/user-attachments/assets/f8672a32-c303-42dc-9969-59eba218c99e)
+-Sign Up:
+![image](https://github.com/user-attachments/assets/5cd5ed3e-fc7d-44b5-8b94-0eef7e2192eb)
+-Others:
+![image](https://github.com/user-attachments/assets/3b59f6ae-ad10-4b13-b8c8-506fa26f59d3)
+![image](https://github.com/user-attachments/assets/432133f5-7f9c-4114-9bd6-a366495c069d)
+![image](https://github.com/user-attachments/assets/9b514b7d-9021-4262-9e8b-a628f29e4706)
+![image](https://github.com/user-attachments/assets/a55a58be-4a49-4d5b-bfa3-8a4147e06c0c)
+![image](https://github.com/user-attachments/assets/d23163ff-1ae9-4c2a-b584-fd058daedf8d)
 
 ---
 
