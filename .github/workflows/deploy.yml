@@ -1,0 +1,56 @@
+name: Publish and deploy Soleil
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
+concurrency:
+  group: campus-production
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: mvn --batch-mode -f backend/pom.xml verify
+      - working-directory: frontend
+        run: |
+          npm ci
+          npm test
+          npm run build
+      - name: Publish images
+        id: publish
+        env:
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eu
+          repo="ghcr.io/${GITHUB_REPOSITORY,,}"
+          printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          for component in backend frontend; do
+            docker build -t "$repo/$component:$GITHUB_SHA" "$component"
+            docker push "$repo/$component:$GITHUB_SHA"
+          done
+          printf 'repo=%s\n' "$repo" >> "$GITHUB_OUTPUT"
+      - name: Deploy on configured host
+        if: ${{ vars.DEPLOY_HOST != '' }}
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          IMAGE_REPO: ${{ steps.publish.outputs.repo }}
+        run: |
+          set -eu
+          umask 077
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$RUNNER_TEMP/campus-key"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$RUNNER_TEMP/campus-known-hosts"
+          scp -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/campus-known-hosts" -i "$RUNNER_TEMP/campus-key" compose.yaml infra/compose.production.yaml infra/nginx.conf "$DEPLOY_USER@$DEPLOY_HOST:campus/"
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/campus-known-hosts" -i "$RUNNER_TEMP/campus-key" "$DEPLOY_USER@$DEPLOY_HOST" "cd campus && mkdir -p infra && mv nginx.conf infra/nginx.conf && export IMAGE_REPO='$IMAGE_REPO' IMAGE_TAG='$GITHUB_SHA' && docker compose -f compose.yaml -f compose.production.yaml pull && docker compose -f compose.yaml -f compose.production.yaml up -d --no-build --wait"

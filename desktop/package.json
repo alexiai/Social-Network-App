@@ -1,0 +1,39 @@
+{
+  "name": "soleil-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Soleil community application for Windows",
+  "author": "Soleil",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test server.test.cjs",
+    "package": "electron-builder --win nsis --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "45.5.0",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "org.soleil.community",
+    "productName": "Soleil",
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.cjs",
+      "server.cjs",
+      "assets/logo.png"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/soleil.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

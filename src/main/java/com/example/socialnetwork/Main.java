@@ -11,9 +11,9 @@ import socialnetwork.ui.Ui;
 public class Main {
 
     public static void main(String[] args) {
-        String url = "jdbc:postgresql://localhost:5432/SocialNetwork";
-        String username = "postgres";
-        String password = "alexiacojan";
+        String url = System.getenv("LEGACY_DB_URL");
+        String username = System.getenv("LEGACY_DB_USER");
+        String password = System.getenv("LEGACY_DB_PASSWORD");
 
         Repository<Long, User> userRepo = new UserDbRepository(url, username, password, new UserValidator());
         Repository<Tuple<User, User>, Friendship> friendshipRepository = new FriendshipDbRepository(url, username,

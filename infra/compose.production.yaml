@@ -1,0 +1,18 @@
+services:
+  mailpit:
+    profiles: ["local-mail"]
+    ports: !reset []
+  backend:
+    build: !reset null
+    image: ${IMAGE_REPO:?Set IMAGE_REPO}/backend:${IMAGE_TAG:?Set IMAGE_TAG}
+    environment:
+      APP_ORIGIN: ${APP_ORIGIN:?Set the HTTPS public origin}
+      SECURE_COOKIE: "true"
+      SMTP_HOST: ${SMTP_HOST:?Set the production SMTP host}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_AUTH: ${SMTP_AUTH:-true}
+      SMTP_TLS: ${SMTP_TLS:-true}
+      SMTP_FROM: ${SMTP_FROM:?Set the production SMTP sender}
+  frontend:
+    build: !reset null
+    image: ${IMAGE_REPO:?Set IMAGE_REPO}/frontend:${IMAGE_TAG:?Set IMAGE_TAG}

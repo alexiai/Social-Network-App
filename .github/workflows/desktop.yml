@@ -1,0 +1,34 @@
+name: Soleil Windows application
+on:
+  pull_request:
+    paths: ['desktop/**', 'Start-Soleil.ps1', '.github/workflows/desktop.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - run: npm ci --ignore-scripts
+      - run: node node_modules/electron/install.js
+      - run: npm test
+      - run: npm ci --prefix ../frontend
+      - run: npm run package
+      - name: Smoke-test the packaged executable
+        run: |
+          $env:SOLEIL_PACKAGED_EXE = (Resolve-Path -LiteralPath 'dist/win-unpacked/Soleil.exe').Path
+          node smoke.cjs
+      - uses: actions/upload-artifact@v5
+        with:
+          name: soleil-windows-installer
+          path: desktop/dist/*.exe
+          if-no-files-found: error
